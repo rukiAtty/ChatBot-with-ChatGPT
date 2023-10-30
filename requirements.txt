@@ -1,4 +1,8 @@
 # local package
+langchain
+faiss-cpu
+openai
+langdetect
 -e .
 
 # external requirements

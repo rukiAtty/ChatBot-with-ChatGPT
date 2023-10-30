@@ -15,7 +15,7 @@ app = Flask(__name__)
 os.environ["OPENAI_API_KEY"] = "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"
 
 # Load your pickled data (assuming it contains your vector data)
-with open("faiss_store_openai.pkl", "rb") as f:
+with open("src/models/faiss_store_openai.pkl", "rb") as f:
     VectorStore = pickle.load(f)
 
 # Initialize your chatbot model
@@ -27,7 +27,7 @@ chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=VectorStore.as_r
 
 @app.route('/')
 def home():
-    return render_template('index4.html')
+    return render_template('index.html')
 
 @app.route('/ask', methods=['POST'])
 
