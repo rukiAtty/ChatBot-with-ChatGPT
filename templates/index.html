@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        /* CSS for the chat interface */
+        #chat-container {
+            max-width: 1500px;
+            margin: 10 auto;
+            padding: 50px;
+            border: 3px solid #6e56a6;
+        }
+        .chat-entry {
+            margin-bottom: 30px;
+            font-family: Candara; /* Specify your preferred font family here */
+            font-size: 20px;
+        }
+        
+        /* Increase the width of the question input field */
+        #question {
+            width: 80%; /* Adjust the width to your preference */
+            height: 40px;
+            font-size: 20px; /* Adjust the font size to your preference */
+            font-family: Comic Sans;
+        }
+
+        #question-form button {
+            background-color: #382f78; /* Change the button background color */
+            color: #e4e3ee; /* Change the button text color */
+            font-size: 20px; /* Change the button font size */
+            padding: 10px 20px; /* Add padding to make the button larger */
+            border: 2px;
+            cursor: pointer;
+            border-radius: 3px;
+            }
+            h1 {
+            font-family: 'Segoe UI';
+            color: #6e56a6;
+            font-size: 40px; /* Specify your preferred font family here */
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h1><center></c>Chat with Chatbot</center></h1><br><br>
+        <div id="chat-history">
+            <!-- Chat history will be displayed here -->
+        </div>
+        <form id="question-form">
+            <input type="text" name="question" id="question" placeholder="Ask a question...">
+            <button type="submit">Ask</button>
+        </form>
+    </div>
+
+    <script>
+        const questionForm = document.getElementById("question-form");
+
+        questionForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            const userQuestion = document.getElementById("question").value;
+            if (userQuestion.trim() === "") {
+                return;
+            }
+
+            const chatHistory = document.getElementById("chat-history");
+
+            // Create a new chat entry for the user's question with a custom icon
+            const userEntry = document.createElement("div");
+            userEntry.className = "chat-entry user";
+            userEntry.innerHTML = '<img src="static/question.png" alt="User Icon" width="30" height="30"> ' +'  '+ userQuestion;
+            chatHistory.appendChild(userEntry);
+
+
+
+            fetch("/ask", {
+                method: "POST",
+                body: new URLSearchParams({ question: userQuestion }),
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Create a new chat entry for the bot's answer with a custom icon
+                if (data && data.answer) {
+                    const botAnswer = data.answer;
+                    const botEntry = document.createElement("div");
+                    botEntry.className = "chat-entry bot";
+                    botEntry.innerHTML = '<img src="static/chatbot1.png" alt="Bot Icon" width="30" height="30">    ' +'  '+ botAnswer;
+                    chatHistory.appendChild(botEntry);
+                } else {
+                    // Handle invalid response
+                    const botEntry = document.createElement("div");
+                    botEntry.className = "chat-entry bot";
+                    botEntry.innerHTML = '<img src="static/chatbot1.png" alt="Bot Icon" width="24" height="24">  Invalid response format';
+                    chatHistory.appendChild(botEntry);
+                }
+
+                // Clear the input field
+                document.getElementById("question").value = "";
+            });
+        });
+    </script>
+</body>
+</html>
