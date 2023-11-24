@@ -12,7 +12,7 @@ from langchain.chat_models import ChatOpenAI
 app = Flask(__name__)
 
 # Set your OpenAI API key
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "OpenAI API key"
 
 # Load your pickled data (assuming it contains your vector data)
 with open("src/models/faiss_store_openai.pkl", "rb") as f:
